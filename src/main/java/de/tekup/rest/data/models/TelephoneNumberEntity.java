@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Entity
@@ -19,6 +21,7 @@ public class TelephoneNumberEntity {
 	private String operator;
 	
 	@ManyToOne
+	@JsonIgnore
 	private PersonEntity person;
 
 }
