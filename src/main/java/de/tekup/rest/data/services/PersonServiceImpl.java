@@ -1,5 +1,6 @@
 package de.tekup.rest.data.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -8,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.tekup.rest.data.models.AddressEntity;
+import de.tekup.rest.data.models.GamesEntity;
 import de.tekup.rest.data.models.PersonEntity;
 import de.tekup.rest.data.models.TelephoneNumberEntity;
 import de.tekup.rest.data.repositories.AddressRepository;
+import de.tekup.rest.data.repositories.GamesRepository;
 import de.tekup.rest.data.repositories.PersonRepository;
 import de.tekup.rest.data.repositories.TelephoneNumberRepository;
 @Service
@@ -19,14 +22,16 @@ public class PersonServiceImpl implements PersonService {
 	private PersonRepository reposPerson;
 	private AddressRepository reposAddress;
 	private TelephoneNumberRepository reposPhone;
+	private GamesRepository reposGames;
 
 	@Autowired
 	public PersonServiceImpl(PersonRepository reposPerson, AddressRepository reposAddress,
-			TelephoneNumberRepository reposPhone) {
+			TelephoneNumberRepository reposPhone, GamesRepository reposGames) {
 		super();
 		this.reposPerson = reposPerson;
 		this.reposAddress = reposAddress;
 		this.reposPhone = reposPhone;
+		this.reposGames = reposGames;
 	}
 
 
@@ -68,6 +73,22 @@ public class PersonServiceImpl implements PersonService {
 			phone.setPerson(person);
 			// save phone
 			reposPhone.save(phone);
+		}
+		
+		// saving Games
+		
+		for (GamesEntity game : entity.getGames()) {
+			//set person into game
+			List<PersonEntity> persons;
+			if(game.getPersons() != null) {
+				persons = game.getPersons();
+			}
+		else {
+				persons = new ArrayList<>();
+			}
+			persons.add(person);
+			game.setPersons(persons);
+			reposGames.save(game);
 		}
 		
 		return person;
