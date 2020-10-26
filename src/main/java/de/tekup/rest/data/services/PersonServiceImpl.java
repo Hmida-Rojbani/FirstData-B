@@ -64,7 +64,9 @@ public class PersonServiceImpl implements PersonService {
 		PersonEntity person =  reposPerson.save(entity);
 		
 		for (TelephoneNumberEntity phone : entity.getPhones()) {
+			// set person into phone
 			phone.setPerson(person);
+			// save phone
 			reposPhone.save(phone);
 		}
 		
