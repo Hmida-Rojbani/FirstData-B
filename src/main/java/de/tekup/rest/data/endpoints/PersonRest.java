@@ -51,6 +51,11 @@ public class PersonRest {
 		return service.getPersonEntityById(id);
 	}
 	
+	@GetMapping("operator/{operator}")
+	public List<PersonEntity> getPersonsEntityWithoperator(@PathVariable("operator")String operator){
+		return service.getAllByOperator(operator);
+	}
+	
 	@PutMapping("/{id}")
 	public PersonEntity updatePersonEntity(@PathVariable("id")long id, @RequestBody PersonEntity newPerson) {
 		return service.modifyPersonEntity(id, newPerson);
