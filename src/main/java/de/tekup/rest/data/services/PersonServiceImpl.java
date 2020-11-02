@@ -94,6 +94,7 @@ public class PersonServiceImpl implements PersonService {
 		return person;
 	}
 
+	// TODO update this code to support all data modification
 	@Override
 	public PersonEntity modifyPersonEntity(long id, PersonEntity newEntity) {
 		PersonEntity entity = this.getPersonEntityById(id);
