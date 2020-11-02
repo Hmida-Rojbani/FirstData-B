@@ -23,6 +23,7 @@ public class AddressEntity {
 	private String city;
 	
 	@OneToOne(mappedBy = "address")
+	@JsonIgnore
 	private PersonEntity person;
 	
 }

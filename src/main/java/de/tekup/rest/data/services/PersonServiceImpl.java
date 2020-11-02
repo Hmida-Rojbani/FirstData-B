@@ -65,6 +65,8 @@ public class PersonServiceImpl implements PersonService {
 		AddressEntity addressInBase = reposAddress.save(addressEntity);
 		// set Address with Id in person
 		entity.setAddress(addressInBase);
+		// set Person within address
+		addressInBase.setPerson(entity);
 		// save person
 		PersonEntity person =  reposPerson.save(entity);
 		
@@ -96,15 +98,46 @@ public class PersonServiceImpl implements PersonService {
 
 	// TODO update this code to support all data modification
 	@Override
-	public PersonEntity modifyPersonEntity(long id, PersonEntity newEntity) {
-		PersonEntity entity = this.getPersonEntityById(id);
-		if (newEntity.getName() != null) 
-			entity.setName(newEntity.getName());
-		if (newEntity.getDateOfBirth() != null) 
-			entity.setDateOfBirth(newEntity.getDateOfBirth());
-		if (newEntity.getAddress() != null) 
-			entity.setAddress(newEntity.getAddress());
-		return reposPerson.save(entity);
+	public PersonEntity modifyPersonEntity(long id, PersonEntity newPerson) {
+		PersonEntity oldPerson = this.getPersonEntityById(id);
+		if (newPerson.getName() != null) 
+			oldPerson.setName(newPerson.getName());
+		if (newPerson.getDateOfBirth() != null) 
+			oldPerson.setDateOfBirth(newPerson.getDateOfBirth());
+		
+		AddressEntity oldAddress = oldPerson.getAddress();
+		AddressEntity newAddress = newPerson.getAddress();
+		
+		// update (fusion de données) entre l'address existant et nouvelle address
+		if(newAddress.getNumber() != 0)
+			oldAddress.setNumber(newAddress.getNumber());
+		if(newAddress.getStreet() != null)
+			oldAddress.setStreet(newAddress.getStreet());
+		if(newAddress.getCity() != null)
+			oldAddress.setCity(newAddress.getCity());
+		
+		// update phones
+		List<TelephoneNumberEntity> newPhones = newPerson.getPhones();
+		List<TelephoneNumberEntity> oldPhones = oldPerson.getPhones();
+		
+		// loop over phones
+		for (int i = 0; i < newPhones.size(); i++) {
+			TelephoneNumberEntity newPhone = newPhones.get(i);
+			for (int j = 0; j < oldPhones.size(); j++) {
+				TelephoneNumberEntity oldPhone = oldPhones.get(j);
+				if(newPhone.getId() == oldPhone.getId()) {
+					if(newPhone.getNumber() != null)
+						oldPhone.setNumber(newPhone.getNumber());
+					if(newPhone.getOperator() != null)
+						oldPhone.setOperator(newPhone.getOperator());
+					// stop loop
+					break;
+				}
+					
+			}
+		}
+		
+		return reposPerson.save(oldPerson);
 	}
 
 	@Override
