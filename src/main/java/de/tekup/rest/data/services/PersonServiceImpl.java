@@ -99,6 +99,7 @@ public class PersonServiceImpl implements PersonService {
 	// TODO update this code to support all data modification
 	@Override
 	public PersonEntity modifyPersonEntity(long id, PersonEntity newPerson) {
+		// is There a better (3 points bonus en DS)
 		PersonEntity oldPerson = this.getPersonEntityById(id);
 		if (newPerson.getName() != null) 
 			oldPerson.setName(newPerson.getName());
@@ -135,6 +136,40 @@ public class PersonServiceImpl implements PersonService {
 				}
 					
 			}
+		}
+		
+		// TODO loop over games 
+		List<GamesEntity> oldGames = oldPerson.getGames();
+		List<GamesEntity> newGames = newPerson.getGames();
+		boolean found;
+		for (GamesEntity newGame : newGames) {
+			found = false;
+			for (GamesEntity oldGame : oldGames) {
+				if(oldGame.getId() == newGame.getId()) {
+					if(newGame.getTitle() != null)
+					oldGame.setTitle(newGame.getTitle());
+					if(newGame.getType() != null)
+						oldGame.setType(newGame.getType());
+					// stop 
+					found = true;
+					break;
+				}
+				
+			}
+			if(found == false) {
+				oldGames.add(newGame);
+				List<PersonEntity> persons;
+				if(newGame.getPersons() != null) {
+					persons = newGame.getPersons();
+				} 
+			else {
+					persons = new ArrayList<>();
+				}
+				persons.add(oldPerson);
+				newGame.setPersons(persons);
+				reposGames.save(newGame);
+			}
+				
 		}
 		
 		return reposPerson.save(oldPerson);
