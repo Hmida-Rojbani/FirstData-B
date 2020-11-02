@@ -55,6 +55,10 @@ public class PersonRest {
 	public List<PersonEntity> getPersonsEntityWithoperator(@PathVariable("operator")String operator){
 		return service.getAllByOperator(operator);
 	}
+	@GetMapping("average/age")
+	public double getAverageAge(){
+		return service.averageAgesPersons();
+	}
 	
 	@PutMapping("/{id}")
 	public PersonEntity updatePersonEntity(@PathVariable("id")long id, @RequestBody PersonEntity newPerson) {

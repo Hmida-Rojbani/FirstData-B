@@ -1,5 +1,6 @@
 package de.tekup.rest.data.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -215,6 +216,37 @@ public class PersonServiceImpl implements PersonService {
 													.distinct()
 													.collect(Collectors.toList());
 		return returnPersons;
+	}
+	
+	// Average age of all Persons
+	
+	public double averageAgesPersons() {
+		/*double sum = 0;
+		List<PersonEntity> persons = reposPerson.findAll();
+		LocalDate now = LocalDate.now();
+		for (PersonEntity person : persons) {
+			 sum += now.getYear() - person.getDateOfBirth().getYear();
+		}*/
+		LocalDate now = LocalDate.now();
+		double average = reposPerson.findAll()
+								.stream()
+								.mapToDouble(person -> now.getYear() - person.getDateOfBirth().getYear())
+								.average()
+								.orElse(0);
+		
+		return average;
+	}
+	
+	// Persons whom playes the type of game the most played
+	public List<PersonEntity> getMaxPlayed(){
+		List<GamesEntity> games = reposGames.findAll();
+		GamesEntity mostType = games.get(0);
+		for (GamesEntity game : games) {
+			if(mostType.getPersons().size() < game.getPersons().size())
+				mostType = game;
+		}
+		// write it in Java8
+		return mostType.getPersons();
 	}
 
 	@Override
