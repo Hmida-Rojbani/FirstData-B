@@ -21,7 +21,7 @@ import lombok.ToString;
 @Data
 @Entity
 @Table(name = "Person")
-@ToString(exclude = "address")
+@ToString(exclude = {"address","phones","games"})
 @EqualsAndHashCode(exclude = "address")
 public class PersonEntity {
 	@Id

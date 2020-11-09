@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.tekup.rest.data.dto.GameType;
 import de.tekup.rest.data.models.AddressEntity;
 import de.tekup.rest.data.models.PersonEntity;
 import de.tekup.rest.data.services.PersonService;
@@ -25,6 +26,7 @@ import de.tekup.rest.data.services.PersonService;
 public class PersonRest {
 	
 	private PersonService service;
+
 	
 	@Autowired
 	public PersonRest(PersonService service) {
@@ -68,6 +70,16 @@ public class PersonRest {
 	@DeleteMapping("/{id}")
 	public PersonEntity deletePersonEntityWithId(@PathVariable("id")long id){
 		return service.deletePersonEntityById(id);
+	}
+	
+	@GetMapping("/type/number")
+	public List<GameType> getTypeAndNumber(){
+		return service.getGameTypeAndNumber();
+	}
+	
+	@GetMapping("/type/most")
+	public List<PersonEntity> getMostPlayed(){
+		return service.getMaxPlayed();
 	}
 	
 	@ExceptionHandler(NoSuchElementException.class)

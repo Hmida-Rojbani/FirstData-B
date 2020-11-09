@@ -9,9 +9,11 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
+@ToString(of = "person")
 public class TelephoneNumberEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

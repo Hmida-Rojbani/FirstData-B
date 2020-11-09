@@ -2,8 +2,11 @@ package de.tekup.rest.data.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -12,6 +15,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.tekup.rest.data.dto.GameType;
 import de.tekup.rest.data.models.AddressEntity;
 import de.tekup.rest.data.models.GamesEntity;
 import de.tekup.rest.data.models.PersonEntity;
@@ -215,7 +219,7 @@ public class PersonServiceImpl implements PersonService {
 													.map(phone -> phone.getPerson())
 													.distinct()
 													.collect(Collectors.toList());
-		return returnPersons;
+		return reposPhone.getPersonWithOperator(operator);
 	}
 	
 	// Average age of all Persons
@@ -240,13 +244,45 @@ public class PersonServiceImpl implements PersonService {
 	// Persons whom playes the type of game the most played
 	public List<PersonEntity> getMaxPlayed(){
 		List<GamesEntity> games = reposGames.findAll();
-		GamesEntity mostType = games.get(0);
+		Map<String, Set<PersonEntity>> map = new HashMap<>();
+		
 		for (GamesEntity game : games) {
-			if(mostType.getPersons().size() < game.getPersons().size())
-				mostType = game;
+			if(map.containsKey(game.getType())) {
+				map.get(game.getType()).addAll(game.getPersons());
+			} else {
+				map.put(game.getType(), new HashSet<>(game.getPersons()));
+			}
 		}
+		
+		List<PersonEntity> persons = Collections.emptyList();
+		
+		for (Set<PersonEntity> listPerson : map.values()) {
+			if(listPerson.size()>persons.size()) {
+				persons = new ArrayList<>(listPerson);
+			}
+		}
+			
+		System.out.println(map);
 		// write it in Java8
-		return mostType.getPersons();
+		
+		return persons;
+	}
+	
+	// Display the games type and the number of games for each type
+	public List<GameType> getGameTypeAndNumber() {
+		List<GameType> gameTypes = new ArrayList<>();
+		
+		for (GamesEntity game : reposGames.findAll()) {
+			GameType gameType = new GameType(game.getType(), 1);
+			if(gameTypes.contains(gameType)) {
+				gameTypes.get(gameTypes.indexOf(gameType)).incrementNumber();
+			}else {
+				gameTypes.add(gameType);
+			}
+				
+		}
+		
+		return gameTypes;
 	}
 
 	@Override
