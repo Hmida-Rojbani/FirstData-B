@@ -14,6 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.modelmapper.ModelMapper;
+
+import de.tekup.rest.data.dto.AddressDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -40,6 +43,11 @@ public class PersonEntity {
 	
 	@ManyToMany(mappedBy = "persons", cascade = CascadeType.REMOVE)
 	private List<GamesEntity> games;
+	
+	public AddressDTO getAddressDTO() {
+		ModelMapper mapper = new ModelMapper();
+		return mapper.map(address,AddressDTO.class);
+	}
 
 
 }

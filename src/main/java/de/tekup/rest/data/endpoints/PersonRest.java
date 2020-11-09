@@ -3,6 +3,7 @@ package de.tekup.rest.data.endpoints;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.tekup.rest.data.dto.GameType;
+import de.tekup.rest.data.dto.PersonDTO;
 import de.tekup.rest.data.models.AddressEntity;
 import de.tekup.rest.data.models.PersonEntity;
 import de.tekup.rest.data.services.PersonService;
@@ -26,13 +28,16 @@ import de.tekup.rest.data.services.PersonService;
 public class PersonRest {
 	
 	private PersonService service;
-
+	private ModelMapper mapper;
+	
 	
 	@Autowired
-	public PersonRest(PersonService service) {
+	public PersonRest(PersonService service, ModelMapper mapper) {
+		super();
 		this.service = service;
+		this.mapper = mapper;
 	}
-	
+
 	@GetMapping
 	public List<PersonEntity> getAllPersonEntities(){
 		return service.getAllPersonEntity();
@@ -44,13 +49,13 @@ public class PersonRest {
 	}
 	
 	@PostMapping
-	public PersonEntity createPersonEntity(@RequestBody PersonEntity person) {
-		return service.createPersonEntity(person);
+	public PersonEntity createPersonEntity(@RequestBody PersonDTO person) {
+		return service.createPersonEntity(mapper.map(person, PersonEntity.class));
 	}
 	
 	@GetMapping("/{id}")
-	public PersonEntity getPersonEntityWithId(@PathVariable("id")long id){
-		return service.getPersonEntityById(id);
+	public PersonDTO getPersonEntityWithId(@PathVariable("id")long id){
+		return mapper.map(service.getPersonEntityById(id), PersonDTO.class);
 	}
 	
 	@GetMapping("operator/{operator}")
