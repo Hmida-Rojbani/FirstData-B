@@ -8,6 +8,7 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.tekup.rest.data.dto.AddressDTO;
 import lombok.Data;
 
 @Entity
@@ -21,6 +22,8 @@ public class AddressEntity {
 	private int number;
 	private String street;
 	private String city;
+	
+	
 	
 	@OneToOne(mappedBy = "address")
 	@JsonIgnore
