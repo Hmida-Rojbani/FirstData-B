@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PersonDTO {
 
-	private long id;
-	private String name;
-	private LocalDate dateOfBirth;
 	
-	private AddressDTO addressDTO;
+	private String name;
+	private int age;
+	private String fullAddress;
+	
+	
 }

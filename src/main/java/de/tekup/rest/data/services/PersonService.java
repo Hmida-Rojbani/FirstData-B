@@ -3,6 +3,8 @@ package de.tekup.rest.data.services;
 import java.util.List;
 
 import de.tekup.rest.data.dto.GameType;
+import de.tekup.rest.data.dto.PersonDTO;
+import de.tekup.rest.data.dto.PersonRequest;
 import de.tekup.rest.data.models.AddressEntity;
 import de.tekup.rest.data.models.PersonEntity;
 
@@ -10,7 +12,7 @@ public interface PersonService {
 	
 	List<PersonEntity> getAllPersonEntity();
 	PersonEntity getPersonEntityById(long id);
-	PersonEntity createPersonEntity(PersonEntity entity);
+	PersonDTO createPersonEntity(PersonRequest entity);
 	PersonEntity modifyPersonEntity(long id, PersonEntity newEntity);
 	PersonEntity deletePersonEntityById(long id);
 	List<AddressEntity> getAllAddressEntity();

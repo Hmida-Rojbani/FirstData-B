@@ -8,7 +8,7 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.tekup.rest.data.dto.AddressDTO;
+import de.tekup.rest.data.dto.AddressRequest;
 import lombok.Data;
 
 @Entity
